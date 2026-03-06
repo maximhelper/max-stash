@@ -1,3 +1,3 @@
 # max-stash
-- [ ]
-- [x]
+- [ ] Hello
+- [x] Test
