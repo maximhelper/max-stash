@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Loading...</title>
-    <link id="dynamic-favicon" rel="icon" type="image/jpeg" href="assets/welcomescan.jpg">
+    <title>max-stash</title>
+    <link id="dynamic-favicon" rel="icon" type="image/jpeg" href="">
     
     <style>
         :root { 
@@ -44,29 +44,17 @@
         .nav-tabs button.active { opacity: 1; color: var(--primary); border-bottom: 2px solid var(--primary); }
         
         .main-layout { display: flex; flex: 1; padding: 20px; gap: 20px; overflow: hidden; }
-        
         .sidebar { width: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 1px solid var(--border); padding-right: 20px; }
         
         .player-logo { 
-            width: 70px; height: 70px; 
-            background: var(--primary); 
-            border-radius: 50%; 
-            display: flex; justify-content: center; align-items: center; 
-            border: 1px solid rgba(255,255,255,0.3); 
-            margin-bottom: 15px; 
-            box-shadow: 0 0 15px rgba(0, 123, 255, 0.4); 
-            cursor: pointer;
-            overflow: hidden; 
+            width: 70px; height: 70px; background: var(--primary); 
+            border-radius: 50%; display: flex; justify-content: center; align-items: center; 
+            border: 1px solid rgba(255,255,255,0.3); margin-bottom: 15px; 
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.4); cursor: pointer; overflow: hidden;
         }
-
-        .logo-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; 
-        }
+        .logo-img { width: 100%; height: 100%; object-fit: cover; }
 
         .brand-title { font-size: 1.2rem; font-weight: bold; color: var(--text); }
-
         .content-area { flex: 1; overflow-y: auto; }
         .panel { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 12px; }
         .tab-content { display: none; height: 100%; }
@@ -92,7 +80,7 @@
     <div class="main-layout">
         <div class="sidebar">
             <div class="player-logo" id="logoDev" onclick="devUnlock()">
-                <img src="assets/welcomescan.jpg" alt="Logo" class="logo-img">
+                <img id="sidebarLogo" src="" alt="Logo" class="logo-img">
             </div>
             <div class="brand-title">max-stash</div>
         </div>
@@ -147,14 +135,27 @@
 </div>
 
 <script>
+    // --- CDN CONFIGURATION ---
+    const USER = "maximhelper";
+    const REPO = "max-stash";
+    const IMG_PATH = `https://cdn.jsdelivr.net/gh/${USER}/${REPO}@main/assets/welcomescan.jpg`;
+
     let audioCtx, source, gainNode, filterNode, isDev = false, isVision = false, isClear = false;
-    const ui = { f: document.getElementById('f'), vid: document.getElementById('vid'), vol: document.getElementById('volBoost'), volVal: document.getElementById('volVal') };
+    const ui = { 
+        f: document.getElementById('f'), 
+        vid: document.getElementById('vid'), 
+        vol: document.getElementById('volBoost'), 
+        volVal: document.getElementById('volVal'),
+        sidebarLogo: document.getElementById('sidebarLogo'),
+        favicon: document.getElementById('dynamic-favicon')
+    };
 
     function showTab(t, btn) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.nav-tabs button').forEach(el => el.classList.remove('active'));
-        document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1)).classList.add('active');
-        btn.classList.add('active');
+        const target = document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1));
+        if(target) target.classList.add('active');
+        if(btn) btn.classList.add('active');
     }
 
     function initAudio() {
@@ -173,12 +174,12 @@
     function toggleClearerAudio() {
         isClear = !isClear;
         initAudio();
-        if (isClear) {
+        if (isClear && gainNode) {
             gainNode.disconnect();
             gainNode.connect(filterNode);
             filterNode.connect(audioCtx.destination);
             document.getElementById('clearBtn').innerText = "AUDIO: CLEAR";
-        } else {
+        } else if (gainNode) {
             filterNode.disconnect();
             gainNode.connect(audioCtx.destination);
             document.getElementById('clearBtn').innerText = "AUDIO: OFF";
@@ -193,7 +194,7 @@
 
     function applyCloak(title, domain) {
         document.title = title;
-        document.getElementById('dynamic-favicon').href = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+        ui.favicon.href = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
     }
 
     function applyCustomCloak() {
@@ -202,10 +203,10 @@
         if(t && d) applyCloak(t, d);
     }
 
-    // 3. Updated JavaScript reset path
     function resetCloak() {
         document.title = "max-stash";
-        document.getElementById('dynamic-favicon').href = "assets/welcomescan.jpg";
+        ui.favicon.href = IMG_PATH;
+        ui.sidebarLogo.src = IMG_PATH;
     }
 
     function launchGnMath() {
@@ -249,7 +250,10 @@
         if (file) { ui.vid.src = URL.createObjectURL(file); ui.vid.style.display = "block"; }
     };
 
-    window.onload = () => { setTimeout(resetCloak, 1000); };
+    window.onload = () => { 
+        resetCloak();
+        setTimeout(resetCloak, 1000); 
+    };
 </script>
 </body>
 </html>
