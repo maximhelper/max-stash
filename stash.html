@@ -11,19 +11,18 @@
             --clear: #00d2ff; 
         }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
-        .app-shell { width: 1018px; height: 573px; background: var(--container-bg); border: 1px solid var(--border); border-radius: 12px; display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,0.8); position: relative; overflow: hidden; }
+        .app-shell { width: 1018px; height: 573px; background: var(--container-bg); border: 1px solid var(--border); border-radius: 12px; display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,0.8); position: relative; }
         
         .nav-tabs { display: flex; flex-direction: row; gap: 8px; padding: 15px 25px; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.2); align-items: center; }
         .nav-tabs button { background: none; border: none; color: var(--text); opacity: 0.6; cursor: pointer; font-weight: bold; padding: 8px 10px; font-size: 0.8em; transition: 0.2s; }
         .nav-tabs button.active { opacity: 1; color: var(--primary); border-bottom: 2px solid var(--primary); }
         
-        /* UGS Button Style */
         .ugs-btn { color: var(--clear) !important; border: 1px solid rgba(0, 210, 255, 0.3) !important; border-radius: 4px; cursor: pointer !important; }
 
         .main-layout { display: flex; flex: 1; padding: 20px; gap: 20px; overflow: hidden; }
         .sidebar { width: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 1px solid var(--border); padding-right: 20px; }
         
-        /* THE SECRET LOGO: Standard arrow mouse, no pointer hand */
+        /* LOGO: Secret arrow cursor (default) */
         .player-logo { 
             width: 70px; height: 70px; background: var(--primary); 
             border-radius: 50%; display: flex; justify-content: center; 
@@ -38,7 +37,6 @@
         .tab-content { display: none; height: 100%; }
         .tab-content.active { display: block; }
         
-        audio { width: 100%; filter: invert(100%) hue-rotate(180deg) brightness(1.5); margin-top: 10px; }
         input, .action-btn { width: 100%; padding: 10px; margin-bottom: 8px; border-radius: 6px; border: 1px solid var(--border); background: #111; color: white; box-sizing: border-box; }
     </style>
 </head>
@@ -46,10 +44,10 @@
 
 <div class="app-shell">
     <div class="nav-tabs">
-        <button class="active" onclick="showTab('music', this)">MUSIC</button>
-        <button onclick="showTab('player', this)">PLAYER</button>
-        <button onclick="showTab('cloak', this)">CLOAK</button>
-        <button onclick="showTab('gnmath', this)">GN-MATH</button>
+        <button id="tabBtnMusic" class="active" onclick="showTab('music', this)">MUSIC</button>
+        <button id="tabBtnPlayer" onclick="showTab('player', this)">PLAYER</button>
+        <button id="tabBtnCloak" onclick="showTab('cloak', this)">CLOAK</button>
+        <button id="tabBtnGnmath" onclick="showTab('gnmath', this)">GN-MATH</button>
         
         <button class="ugs-btn" onclick='fetch("https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile@main/AASINGLEFILE.html?t="+Date.now()).then(r => r.text()).then(t => {const w = window.open("about:blank", "_blank"); if(w){w.document.open();w.document.write(t);w.document.close();}});'>UGS</button>
         
@@ -61,16 +59,15 @@
             <div class="player-logo">
                 <img id="sidebarLogo" src="" alt="" class="logo-img">
             </div>
-            <div style="font-size: 0.9rem; font-weight: bold; opacity: 0.4;">max-stash</div>
+            <div style="font-size: 0.9rem; font-weight: bold; opacity: 0.3;">max-stash</div>
         </div>
 
         <div class="content-area">
             <div id="tabMusic" class="tab-content active">
                 <div class="panel">
                     <h3 style="margin:0; color:var(--primary);">Audio Library</h3>
-                    <p style="font-size: 0.8rem; opacity: 0.6;">Music files must be in /assets/music/</p>
-                    <div id="musicList"></div>
-                    <audio id="audioPlayer" controls></audio>
+                    <div id="musicList" style="margin-top:10px;"></div>
+                    <audio id="audioPlayer" controls style="width:100%; margin-top:10px; filter: invert(1);"></audio>
                 </div>
             </div>
 
@@ -85,12 +82,12 @@
                 <div class="panel">
                     <input type="text" id="cloakTitle" placeholder="Tab Title">
                     <input type="text" id="cloakDomain" placeholder="Favicon Domain (google.com)">
-                    <button class="action-btn" onclick="applyCloak()" style="background:var(--primary); cursor: pointer;">APPLY</button>
+                    <button class="action-btn" onclick="applyCloak()" style="background:var(--primary); cursor: pointer;">APPLY CLOAK</button>
                 </div>
             </div>
 
             <div id="tabGnmath" class="tab-content">
-                <div class="panel"><h3>GN-MATH</h3><p>Module Loaded.</p></div>
+                <div class="panel"><h3>GN-MATH</h3><p>Module ready.</p></div>
             </div>
         </div>
     </div>
@@ -99,9 +96,27 @@
 <script>
     const USER = "maximhelper";
     const REPO = "max-stash";
-    // The "Time Key" forces the image to refresh from GitHub every minute
-    const timeKey = Math.floor(Date.now() / 60000); 
-    const IMG_URL = `https://cdn.jsdelivr.net/gh/${USER}/${REPO}@main/assets/welcomescan.jpg?v=${timeKey}`;
+    const t = Math.floor(Date.now() / 60000); 
+
+    // We try 'main' first, then 'master' as a backup
+    function loadLogo() {
+        const logo = document.getElementById('sidebarLogo');
+        const fav = document.getElementById('dynamic-favicon');
+        const path = `assets/welcomescan.jpg?v=${t}`;
+        
+        const primaryUrl = `https://cdn.jsdelivr.net/gh/${USER}/${REPO}@main/${path}`;
+        const backupUrl = `https://cdn.jsdelivr.net/gh/${USER}/${REPO}@master/${path}`;
+
+        logo.src = primaryUrl;
+        fav.href = primaryUrl;
+
+        logo.onerror = () => {
+            if (logo.src !== backupUrl) {
+                logo.src = backupUrl;
+                fav.href = backupUrl;
+            }
+        };
+    }
 
     function showTab(t, btn) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -117,18 +132,13 @@
         if(dom) document.getElementById('dynamic-favicon').href = `https://www.google.com/s2/favicons?domain=${dom}&sz=64`;
     }
 
-    // Set the image on start
-    window.onload = () => {
-        document.getElementById('sidebarLogo').src = IMG_URL;
-        document.getElementById('dynamic-favicon').href = IMG_URL;
-        console.log("Image requested from: ", IMG_URL);
-    };
-
     document.getElementById('f').onchange = (e) => {
         const v = document.getElementById('vid');
         v.src = URL.createObjectURL(e.target.files[0]);
         v.style.display = "block";
     };
+
+    window.onload = loadLogo;
 </script>
 </body>
 </html>
