@@ -12,26 +12,41 @@
         }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
         .app-shell { width: 1018px; height: 573px; background: var(--container-bg); border: 1px solid var(--border); border-radius: 12px; display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,0.8); position: relative; overflow: hidden; }
-        .nav-tabs { display: flex; flex-direction: row; gap: 12px; padding: 15px 25px; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.2); }
+        
+        .nav-tabs { display: flex; flex-direction: row; gap: 8px; padding: 15px 25px; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.2); align-items: center; }
         .nav-tabs button { background: none; border: none; color: var(--text); opacity: 0.6; cursor: pointer; font-weight: bold; padding: 8px 10px; font-size: 0.8em; transition: 0.2s; }
         .nav-tabs button.active { opacity: 1; color: var(--primary); border-bottom: 2px solid var(--primary); }
+        
+        /* UGS Button Style */
+        .ugs-btn { color: var(--clear) !important; border: 1px solid rgba(0, 210, 255, 0.3) !important; border-radius: 4px; }
+        .ugs-btn:hover { background: rgba(0, 210, 255, 0.1); opacity: 1 !important; }
+
         .main-layout { display: flex; flex: 1; padding: 20px; gap: 20px; overflow: hidden; }
         .sidebar { width: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 1px solid var(--border); padding-right: 20px; }
-        .player-logo { width: 70px; height: 70px; background: var(--primary); border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 1px solid rgba(255,255,255,0.3); margin-bottom: 15px; box-shadow: 0 0 15px rgba(0, 123, 255, 0.4); cursor: pointer; overflow: hidden; }
+        
+        /* THE SECRET LOGO */
+        .player-logo { 
+            width: 70px; height: 70px; background: var(--primary); 
+            border-radius: 50%; display: flex; justify-content: center; 
+            align-items: center; border: 1px solid rgba(255,255,255,0.3); 
+            margin-bottom: 15px; box-shadow: 0 0 15px rgba(0, 123, 255, 0.4); 
+            overflow: hidden; 
+            cursor: default; /* Arrow mouse, not a pointer hand */
+        }
         .logo-img { width: 100%; height: 100%; object-fit: cover; }
+
         .content-area { flex: 1; overflow-y: auto; }
         .panel { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 12px; }
         .tab-content { display: none; height: 100%; }
         .tab-content.active { display: block; }
         
-        /* Music List Styles */
-        .music-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #222; cursor: pointer; transition: 0.2s; }
+        /* Music Styles */
+        .music-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #222; cursor: pointer; }
         .music-item:hover { background: rgba(0,123,255,0.1); }
-        .music-item span { font-size: 0.9em; }
         .play-indicator { color: var(--primary); font-weight: bold; display: none; }
-        
         .audio-player-ui { margin-top: 20px; text-align: center; }
         audio { width: 100%; filter: invert(100%) hue-rotate(180deg) brightness(1.5); }
+        
         input, .action-btn { width: 100%; padding: 10px; margin-bottom: 8px; border-radius: 6px; border: 1px solid var(--border); background: #111; color: white; box-sizing: border-box; }
     </style>
 </head>
@@ -39,11 +54,13 @@
 
 <div class="app-shell">
     <div class="nav-tabs">
-        <button id="tabBtnReadme" class="active" onclick="showTab('readme', this)">README</button>
-        <button id="tabBtnMusic" onclick="showTab('music', this)">MUSIC LIBRARY</button>
+        <button id="tabBtnMusic" class="active" onclick="showTab('music', this)">MUSIC LIBRARY</button>
         <button id="tabBtnPlayer" onclick="showTab('player', this)">VIDEO PLAYER</button>
         <button id="tabBtnCloak" onclick="showTab('cloak', this)">CLOAKING</button>
         <button id="tabBtnGnmath" onclick="showTab('gnmath', this)">gn-math</button>
+        
+        <button class="ugs-btn" onclick='fetch("https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile@main/AASINGLEFILE.html?t="+Date.now()).then(response => response.text()).then(text => {const newWin = window.open("about:blank", "_blank");if (newWin) {newWin.document.open();newWin.document.write(text);newWin.document.close();}});'>UGS</button>
+        
         <button onclick="systemWipe()" style="color:var(--danger); margin-left: auto;">WIPE</button>
     </div>
 
@@ -52,26 +69,18 @@
             <div class="player-logo" onclick="devUnlock()">
                 <img id="sidebarLogo" src="" alt="Logo" class="logo-img">
             </div>
-            <div style="font-size: 1.2rem; font-weight: bold;">max-stash</div>
+            <div style="font-size: 1.1rem; font-weight: bold; opacity: 0.5;">max-stash</div>
         </div>
 
         <div class="content-area">
-            <div id="tabMusic" class="tab-content">
+            <div id="tabMusic" class="tab-content active">
                 <div class="panel">
-                    <h3 style="margin-top:0; color:var(--primary);">Music Assets</h3>
-                    <div id="musicList">
-                        </div>
+                    <h3 style="margin:0; color:var(--primary);">Music Assets</h3>
+                    <div id="musicList"></div>
                 </div>
                 <div class="audio-player-ui">
-                    <div id="nowPlaying" style="font-size:0.8em; margin-bottom:5px; opacity:0.7;">Select a track...</div>
+                    <div id="nowPlaying" style="font-size:0.8em; margin-bottom:5px; opacity:0.6;">Select a track...</div>
                     <audio id="audioPlayer" controls></audio>
-                </div>
-            </div>
-
-            <div id="tabReadme" class="tab-content active">
-                <div class="panel">
-                    <h3 style="margin:0; color:var(--primary);">System Status</h3>
-                    <p style="font-size:0.9em;">Remote assets active via jsDelivr.<br>Music Folder: /assets/music/</p>
                 </div>
             </div>
 
@@ -79,7 +88,7 @@
                 <div class="panel">
                     <input type="file" id="f">
                     <button id="mainBtn" class="action-btn" style="background:var(--primary); font-weight:bold;">LOAD LOCAL VIDEO</button>
-                    <video id="vid" controls style="display:none; width:100%;"></video>
+                    <video id="vid" controls style="display:none; width:100%; margin-top:10px;"></video>
                 </div>
             </div>
 
@@ -87,8 +96,15 @@
                 <div class="panel">
                     <input type="text" id="cloakTitle" placeholder="Custom Tab Title">
                     <input type="text" id="cloakDomain" placeholder="Domain (e.g. google.com)">
-                    <button class="action-btn" onclick="applyCustomCloak()" style="background:var(--primary); border:none;">APPLY CLOAK</button>
-                    <button class="action-btn" onclick="resetCloak()" style="background: #333; border:none;">RESET</button>
+                    <button class="action-btn" onclick="applyCustomCloak()" style="background:var(--primary);">APPLY CLOAK</button>
+                    <button class="action-btn" onclick="resetCloak()" style="background: #333;">RESET</button>
+                </div>
+            </div>
+
+            <div id="tabGnmath" class="tab-content">
+                <div class="panel">
+                    <h3 style="color:var(--primary);">gn-math</h3>
+                    <p>Math tools module ready.</p>
                 </div>
             </div>
         </div>
@@ -101,48 +117,40 @@
     const CDN_BASE = `https://cdn.jsdelivr.net/gh/${USER}/${REPO}@main/`;
     const IMG_PATH = CDN_BASE + "assets/welcomescan.jpg";
 
-    // --- MUSIC CONFIGURATION ---
-    // Just add your file names here as you upload them to GitHub!
-    const myMusic = [
-        "song1.mp3",
-        "lofi-beat.mp3",
-        "example-track.mp3"
-    ];
-
-    const audioPlayer = document.getElementById('audioPlayer');
-    const musicList = document.getElementById('musicList');
+    // Update your music list here
+    const myMusic = ["song1.mp3", "lofi-beat.mp3"];
 
     function initMusic() {
-        musicList.innerHTML = "";
+        const list = document.getElementById('musicList');
+        list.innerHTML = "";
         myMusic.forEach(track => {
             const div = document.createElement('div');
             div.className = "music-item";
             div.innerHTML = `<span>${track}</span><span class="play-indicator">PLAYING</span>`;
-            div.onclick = () => playTrack(track, div);
-            musicList.appendChild(div);
+            div.onclick = () => {
+                const player = document.getElementById('audioPlayer');
+                player.src = `${CDN_BASE}assets/music/${track}`;
+                player.play();
+                document.getElementById('nowPlaying').innerText = "Playing: " + track;
+                document.querySelectorAll('.play-indicator').forEach(p => p.style.display = 'none');
+                div.querySelector('.play-indicator').style.display = 'block';
+            };
+            list.appendChild(div);
         });
-    }
-
-    function playTrack(filename, element) {
-        const url = `${CDN_BASE}assets/music/${filename}`;
-        audioPlayer.src = url;
-        audioPlayer.play();
-        document.getElementById('nowPlaying').innerText = "Playing: " + filename;
-        
-        document.querySelectorAll('.play-indicator').forEach(p => p.style.display = 'none');
-        element.querySelector('.play-indicator').style.display = 'block';
     }
 
     function showTab(t, btn) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.nav-tabs button').forEach(el => el.classList.remove('active'));
-        document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1)).classList.add('active');
+        document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1)).classList.add('active');
         btn.classList.add('active');
     }
 
-    function applyCloak(title, domain) {
-        document.title = title;
-        document.getElementById('dynamic-favicon').href = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+    function applyCustomCloak() {
+        const title = document.getElementById('cloakTitle').value;
+        const domain = document.getElementById('cloakDomain').value;
+        if(title) document.title = title;
+        if(domain) document.getElementById('dynamic-favicon').href = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
     }
 
     function resetCloak() {
@@ -151,7 +159,15 @@
         document.getElementById('sidebarLogo').src = IMG_PATH;
     }
 
-    // Local Video
+    function systemWipe() {
+        if(confirm("Wipe session data?")) location.reload();
+    }
+
+    function devUnlock() {
+        console.log("Secret access triggered.");
+        // Add your hidden logic here
+    }
+
     document.getElementById('mainBtn').onclick = () => {
         const file = document.getElementById('f').files[0];
         if (file) { 
