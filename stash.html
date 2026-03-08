@@ -5,6 +5,8 @@
     <title>Loading...</title>
     <link id="dynamic-favicon" rel="icon" type="image/jpeg" href="">
     
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
     <style>
         :root { 
             --bg: #0a0a0a; --container-bg: #161616; --text: #e0e0e0; 
@@ -60,7 +62,6 @@
             transition: 0.5s ease;
         }
 
-        /* Pulse for the 1s Loading period */
         .loading-pulse { animation: logo-pulse 1s infinite ease-in-out; }
         @keyframes logo-pulse {
             0% { transform: scale(1); opacity: 1; }
@@ -81,10 +82,15 @@
         .tab-content { display: none; height: 100%; }
         .tab-content.active { display: block; }
         
+        /* Markdown Renderer Styling */
         #readme-container { 
-            font-family: 'Consolas', monospace; font-size: 0.85rem; 
-            white-space: pre-wrap; color: #bbb; line-height: 1.5;
+            font-size: 0.9rem; 
+            color: #ccc;
+            line-height: 1.6;
         }
+        #readme-container h1, #readme-container h2 { color: var(--primary); border-bottom: 1px solid var(--border); padding-bottom: 5px; }
+        #readme-container code { background: #222; padding: 2px 5px; border-radius: 4px; font-family: monospace; }
+        #readme-container ul { padding-left: 20px; }
 
         input, .action-btn { width: 100%; padding: 10px; margin-bottom: 8px; border-radius: 6px; border: 1px solid var(--border); background: #111; color: white; box-sizing: border-box; cursor: pointer; transition: 0.2s; }
         .action-btn:hover { background: rgba(255,255,255,0.1); }
@@ -116,12 +122,11 @@
         <div class="content-area">
             <div id="tabReadme" class="tab-content active">
                 <div class="panel">
-                    <h3 style="margin:0; color:var(--primary); margin-bottom: 10px;">Git README</h3>
-                    <div id="readme-container">Fetching latest documentation...</div>
+                    <div id="readme-container">Loading documentation...</div>
                 </div>
                 <div class="panel">
                     <h3 style="margin:0; color:var(--primary);">System Status</h3>
-                    <p style="font-size:0.9em;">Resolution: 1018x573<br>Delayed Branding: Active (1s)</p>
+                    <p style="font-size:0.9em;">Resolution: 1018x573<br>Markdown Support: Enabled</p>
                 </div>
             </div>
 
@@ -184,7 +189,11 @@
         const readmeBox = document.getElementById('readme-container');
         try {
             const res = await fetch("https://cdn.jsdelivr.net/gh/maximhelper/max-stash@main/README.md?nocache=" + Date.now());
-            if (res.ok) { readmeBox.innerText = await res.text(); }
+            if (res.ok) { 
+                const rawText = await res.text();
+                // MARKED INTEGRATION: Converts Markdown to HTML
+                readmeBox.innerHTML = marked.parse(rawText); 
+            }
             else { readmeBox.innerText = "README.md not found."; }
         } catch (e) { readmeBox.innerText = "Fetch error."; }
     }
@@ -293,12 +302,11 @@
         }
     }, 1000);
 
-    // Initial Load Sequence
     window.onload = () => { 
         fetchReadme();
         setTimeout(() => {
-            resetCloak(); // Switches title to max-stash and shows your logo
-            document.getElementById('logoDev').classList.remove('loading-pulse'); // Stop pulsing
+            resetCloak();
+            document.getElementById('logoDev').classList.remove('loading-pulse');
         }, 1000); 
     };
 </script>
