@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Loading...</title>
-    <link id="dynamic-favicon" rel="icon" type="image/jpeg" href="assets/welcomescan.jpg">
+    <title>max-stash</title>
+    <link id="dynamic-favicon" rel="icon" type="image/jpeg" href="https://cdn.jsdelivr.net/gh/maximhelper/max-stash@main/assets/welcomescan.jpg">
     
     <style>
         :root { 
@@ -47,6 +47,7 @@
         
         .sidebar { width: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 1px solid var(--border); padding-right: 20px; }
         
+        /* Updated Logo for Glow Effect */
         .player-logo { 
             width: 70px; height: 70px; 
             background: var(--primary); 
@@ -57,16 +58,18 @@
             box-shadow: 0 0 15px rgba(0, 123, 255, 0.4); 
             cursor: pointer;
             overflow: hidden; 
+            transition: 0.5s ease;
         }
 
-        .logo-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; 
+        /* Dev Glow Class */
+        .player-logo.dev-active {
+            box-shadow: 0 0 30px var(--boost), 0 0 10px var(--boost);
+            border-color: var(--boost);
+            transform: scale(1.05);
         }
 
+        .logo-img { width: 100%; height: 100%; object-fit: cover; }
         .brand-title { font-size: 1.2rem; font-weight: bold; color: var(--text); }
-
         .content-area { flex: 1; overflow-y: auto; }
         .panel { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 12px; }
         .tab-content { display: none; height: 100%; }
@@ -75,6 +78,7 @@
         input, .action-btn { width: 100%; padding: 10px; margin-bottom: 8px; border-radius: 6px; border: 1px solid var(--border); background: #111; color: white; box-sizing: border-box; }
         video { width: 100%; border-radius: 8px; background: #000; margin-top: 10px; max-height: 260px; transition: filter 0.3s; }
         .vol-slider { cursor: pointer; accent-color: var(--primary); width: 100%; height: 6px; }
+        .stats-font { font-family: monospace; color: var(--primary); font-size: 1.2rem; }
     </style>
 </head>
 <body>
@@ -92,7 +96,7 @@
     <div class="main-layout">
         <div class="sidebar">
             <div class="player-logo" id="logoDev" onclick="devUnlock()">
-                <img src="assets/welcomescan.jpg" alt="Logo" class="logo-img">
+                <img src="https://cdn.jsdelivr.net/gh/maximhelper/max-stash@main/assets/welcomescan.jpg" alt="Logo" class="logo-img">
             </div>
             <div class="brand-title">max-stash</div>
         </div>
@@ -149,6 +153,7 @@
 <script>
     let audioCtx, source, gainNode, filterNode, isDev = false, isVision = false, isClear = false;
     const ui = { f: document.getElementById('f'), vid: document.getElementById('vid'), vol: document.getElementById('volBoost'), volVal: document.getElementById('volVal') };
+    const LOGO_URL = "https://cdn.jsdelivr.net/gh/maximhelper/max-stash@main/assets/welcomescan.jpg";
 
     function showTab(t, btn) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -171,15 +176,19 @@
     }
 
     function toggleClearerAudio() {
+        if (!ui.vid.src) return;
         isClear = !isClear;
         initAudio();
+        
+        // Correct Routing
+        gainNode.disconnect();
+        filterNode.disconnect();
+
         if (isClear) {
-            gainNode.disconnect();
             gainNode.connect(filterNode);
             filterNode.connect(audioCtx.destination);
             document.getElementById('clearBtn').innerText = "AUDIO: CLEAR";
         } else {
-            filterNode.disconnect();
             gainNode.connect(audioCtx.destination);
             document.getElementById('clearBtn').innerText = "AUDIO: OFF";
         }
@@ -202,10 +211,9 @@
         if(t && d) applyCloak(t, d);
     }
 
-    // 3. Updated JavaScript reset path
     function resetCloak() {
         document.title = "max-stash";
-        document.getElementById('dynamic-favicon').href = "assets/welcomescan.jpg";
+        document.getElementById('dynamic-favicon').href = LOGO_URL;
     }
 
     function launchGnMath() {
@@ -221,6 +229,7 @@
         isDev = false; isVision = false; isClear = false;
         ui.vol.max = "15"; ui.vol.value = "10"; ui.volVal.innerText = "100%";
         ui.vid.style.filter = "none";
+        document.getElementById('logoDev').classList.remove('dev-active');
         resetCloak();
         showTab('readme', document.getElementById('tabBtnReadme'));
     }
@@ -233,8 +242,10 @@
 
     function devUnlock() {
         if (prompt("Key:") === "123!@#qweQWE") {
-            isDev = true; ui.vol.max = "50"; 
+            isDev = true; 
+            ui.vol.max = "50"; 
             ui.volVal.style.color = "var(--boost)";
+            document.getElementById('logoDev').classList.add('dev-active');
         }
     }
 
