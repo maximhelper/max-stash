@@ -1,4 +1,4 @@
-  GitHub Release Notes: v1.0.2
+  GitHub Release Notes: v1.17
 Release Title: v1.0.2 - Compatibility & Aesthetic Update
   New Features
 - Theming Engine: Added a high-contrast Light/Dark mode toggle located in the Statistics tab.
