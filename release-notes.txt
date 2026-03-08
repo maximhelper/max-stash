@@ -1,5 +1,9 @@
-v1.08 PATCH NOTES:
-- Added Game Center with UGS and gn-math
-- Fixed Audio Toggle logic
-- Added 1s Cloaking delay for better stability
-- Markdown is now supported on the main page (README)
+PATCH NOTES - v1.0.2
+- Added Light/Dark mode toggle in Statistics tab
+- Added purple neon glow to logo for authenticated Dev Mode
+- Added neon pink styling to system switches
+- Implemented cache-busting timestamps on all game fetch requests
+- Widened Game Center buttons to 600px for better accessibility
+- Removed panel scrollbars for a cleaner application interface
+- Added real-time CPU and Network downlink monitoring in Statistics
+**FAMIDASH DOES NOT WORK**
