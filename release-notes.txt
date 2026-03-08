@@ -1,4 +1,4 @@
-v1.01 PATCH NOTES:
+v1.08 PATCH NOTES:
 - Added Game Center with UGS and gn-math
 - Fixed Audio Toggle logic
 - Added 1s Cloaking delay for better stability
