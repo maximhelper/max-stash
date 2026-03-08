@@ -47,7 +47,6 @@
         
         .sidebar { width: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 1px solid var(--border); padding-right: 20px; }
         
-        /* Updated Logo for Glow Effect */
         .player-logo { 
             width: 70px; height: 70px; 
             background: var(--primary); 
@@ -61,7 +60,6 @@
             transition: 0.5s ease;
         }
 
-        /* Dev Glow Class */
         .player-logo.dev-active {
             box-shadow: 0 0 30px var(--boost), 0 0 10px var(--boost);
             border-color: var(--boost);
@@ -75,7 +73,8 @@
         .tab-content { display: none; height: 100%; }
         .tab-content.active { display: block; }
         
-        input, .action-btn { width: 100%; padding: 10px; margin-bottom: 8px; border-radius: 6px; border: 1px solid var(--border); background: #111; color: white; box-sizing: border-box; }
+        input, .action-btn { width: 100%; padding: 10px; margin-bottom: 8px; border-radius: 6px; border: 1px solid var(--border); background: #111; color: white; box-sizing: border-box; cursor: pointer; transition: 0.2s; }
+        .action-btn:hover { background: rgba(255,255,255,0.1); }
         video { width: 100%; border-radius: 8px; background: #000; margin-top: 10px; max-height: 260px; transition: filter 0.3s; }
         .vol-slider { cursor: pointer; accent-color: var(--primary); width: 100%; height: 6px; }
         .stats-font { font-family: monospace; color: var(--primary); font-size: 1.2rem; }
@@ -89,7 +88,7 @@
         <button id="tabBtnPlayer" onclick="showTab('player', this)">VIDEO PLAYER</button>
         <button id="tabBtnCloak" onclick="showTab('cloak', this)">CLOAKING</button>
         <button id="tabBtnStatistics" onclick="showTab('statistics', this)">STATISTICS</button>
-        <button id="tabBtnGnmath" onclick="showTab('gnmath', this)">gn-math</button>
+        <button id="tabBtnGames" onclick="showTab('games', this)">GAME CENTER</button>
         <button onclick="systemWipe()" style="color:var(--danger); margin-left: auto;">WIPE</button>
     </div>
 
@@ -114,8 +113,8 @@
                     <span style="font-size:0.75em;">VOL: <span id="volVal">100%</span></span>
                     <input type="range" id="volBoost" class="vol-slider" min="1" max="15" value="10">
                     <div style="display:flex; gap:8px; margin-top:10px;">
-                        <button class="action-btn" id="clearBtn" onclick="toggleClearerAudio()" style="color:var(--clear); border-color:var(--clear); background:none; cursor:pointer; font-size:0.75em;">AUDIO: OFF</button>
-                        <button class="action-btn" id="visionBtn" onclick="toggleVision()" style="color:var(--boost); border-color:var(--boost); background:none; cursor:pointer; font-size:0.75em;">ULTRABRIGHT: OFF</button>
+                        <button class="action-btn" id="clearBtn" onclick="toggleClearerAudio()" style="color:var(--clear); border-color:var(--clear); background:none; font-size:0.75em;">AUDIO: OFF</button>
+                        <button class="action-btn" id="visionBtn" onclick="toggleVision()" style="color:var(--boost); border-color:var(--boost); background:none; font-size:0.75em;">ULTRABRIGHT: OFF</button>
                     </div>
                 </div>
                 <input type="file" id="f">
@@ -141,9 +140,10 @@
                 </div>
             </div>
 
-            <div id="tabGnmath" class="tab-content">
-                <div class="panel" style="text-align: center; height: 280px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <div id="tabGames" class="tab-content">
+                <div class="panel" style="text-align: center; height: 280px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 15px;">
                     <button class="action-btn" onclick="launchGnMath()" style="width:220px; border-color:var(--boost); color:var(--boost); background:none; font-weight:bold;">OPEN GN-MATH</button>
+                    <button class="action-btn" onclick="launchUGS()" style="width:220px; border-color:var(--clear); color:var(--clear); background:none; font-weight:bold;">OPEN UGS</button>
                 </div>
             </div>
         </div>
@@ -176,18 +176,22 @@
     }
 
     function toggleClearerAudio() {
-        if (!ui.vid.src) return;
+        // Prevent clicking before a video is loaded
+        if (!ui.vid.src) {
+            alert("Please initialize the player with a video file first!");
+            return;
+        }
+        
         isClear = !isClear;
         initAudio();
         
-        // Correct Routing
         gainNode.disconnect();
         filterNode.disconnect();
 
         if (isClear) {
             gainNode.connect(filterNode);
             filterNode.connect(audioCtx.destination);
-            document.getElementById('clearBtn').innerText = "AUDIO: CLEAR";
+            document.getElementById('clearBtn').innerText = "AUDIO: ON";
         } else {
             gainNode.connect(audioCtx.destination);
             document.getElementById('clearBtn').innerText = "AUDIO: OFF";
@@ -213,7 +217,10 @@
 
     function resetCloak() {
         document.title = "max-stash";
-        document.getElementById('dynamic-favicon').href = LOGO_URL;
+        const favicon = document.getElementById('dynamic-favicon');
+        if (favicon) {
+            favicon.href = LOGO_URL;
+        }
     }
 
     function launchGnMath() {
@@ -221,6 +228,17 @@
         .then(r => r.text()).then(t => {
             const w = window.open("about:blank", "_blank");
             if (w) { w.document.open(); w.document.write(t); w.document.close(); }
+            else { alert("Pop-up blocked. Please allow pop-ups."); }
+        });
+    }
+
+    // New UGS Launch Function
+    function launchUGS() {
+        fetch("https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile@main/AASINGLEFILE.html?t=" + Date.now())
+        .then(r => r.text()).then(t => {
+            const w = window.open("about:blank", "_blank");
+            if (w) { w.document.open(); w.document.write(t); w.document.close(); }
+            else { alert("Pop-up blocked. Please allow pop-ups."); }
         });
     }
 
@@ -229,6 +247,8 @@
         isDev = false; isVision = false; isClear = false;
         ui.vol.max = "15"; ui.vol.value = "10"; ui.volVal.innerText = "100%";
         ui.vid.style.filter = "none";
+        document.getElementById('clearBtn').innerText = "AUDIO: OFF";
+        document.getElementById('visionBtn').innerText = "ULTRABRIGHT: OFF";
         document.getElementById('logoDev').classList.remove('dev-active');
         resetCloak();
         showTab('readme', document.getElementById('tabBtnReadme'));
@@ -260,7 +280,10 @@
         if (file) { ui.vid.src = URL.createObjectURL(file); ui.vid.style.display = "block"; }
     };
 
-    window.onload = () => { setTimeout(resetCloak, 1000); };
+    // Forces logo to apply exactly 1s after injection
+    window.onload = () => { 
+        setTimeout(resetCloak, 1000); 
+    };
 </script>
 </body>
 </html>
