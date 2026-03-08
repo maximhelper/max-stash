@@ -1,4 +1,4 @@
-PATCH NOTES - v1.0.2
+PATCH NOTES - v1.17
 - Added Light/Dark mode toggle in Statistics tab
 - Added purple neon glow to logo for authenticated Dev Mode
 - Added neon pink styling to system switches
