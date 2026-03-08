@@ -12,30 +12,45 @@
         }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
         .app-shell { width: 1018px; height: 573px; background: var(--container-bg); border: 1px solid var(--border); border-radius: 12px; display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,0.8); position: relative; overflow: hidden; }
+        
+        /* Navigation */
         .nav-tabs { display: flex; flex-direction: row; gap: 12px; padding: 15px 25px; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.2); }
         .nav-tabs button { background: none; border: none; color: var(--text); opacity: 0.6; cursor: pointer; font-weight: bold; padding: 8px 10px; font-size: 0.8em; transition: 0.2s; }
         .nav-tabs button.active { opacity: 1; color: var(--primary); border-bottom: 2px solid var(--primary); }
+        
         .main-layout { display: flex; flex: 1; padding: 20px; gap: 20px; overflow: hidden; }
         .sidebar { width: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 1px solid var(--border); padding-right: 20px; }
+        
         .player-logo { width: 70px; height: 70px; background: var(--primary); border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 1px solid rgba(255,255,255,0.3); margin-bottom: 15px; box-shadow: 0 0 15px rgba(0, 123, 255, 0.4); cursor: pointer; overflow: hidden; transition: 0.5s ease; }
+        .loading-pulse { animation: logo-pulse 1s infinite ease-in-out; }
+        @keyframes logo-pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.7; box-shadow: 0 0 25px var(--primary); } 100% { transform: scale(1); opacity: 1; } }
+        .player-logo.dev-active { box-shadow: 0 0 30px var(--boost), 0 0 10px var(--boost); border-color: var(--boost); transform: scale(1.05); }
         .logo-img { width: 100%; height: 100%; object-fit: cover; }
         .brand-title { font-size: 1.2rem; font-weight: bold; color: var(--text); }
-        .content-area { flex: 1; overflow-y: auto; }
+        
+        .content-area { flex: 1; overflow-y: auto; padding-right: 5px; }
         .panel { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 12px; }
         .tab-content { display: none; height: 100%; }
         .tab-content.active { display: block; }
-        
-        /* MD Content Styles */
-        #readme-container h1, #readme-container h2, #readme-container h3 { color: var(--primary); border-bottom: 1px solid var(--border); margin: 15px 0 10px 0; }
-        #readme-container h4, #readme-container h5, #readme-container h6 { color: #fff; margin: 10px 0 5px 0; font-size: 0.9em; }
-        #readme-container hr { border: 0; border-top: 1px solid var(--border); margin: 20px 0; }
-        #readme-container table { border-collapse: collapse; width: 100%; margin: 10px 0; }
-        #readme-container th, #readme-container td { border: 1px solid var(--border); padding: 8px; text-align: left; }
-        #readme-container code { background: #222; padding: 2px 4px; border-radius: 4px; font-family: monospace; color: var(--clear); }
 
-        input, .action-btn { width: 100%; padding: 10px; margin-bottom: 8px; border-radius: 6px; border: 1px solid var(--border); background: #111; color: white; cursor: pointer; font-size: 0.8em; }
-        video { width: 100%; border-radius: 8px; background: #000; margin-top: 10px; max-height: 260px; }
-        .vol-slider { cursor: pointer; accent-color: var(--primary); width: 100%; height: 6px; }
+        /* Full Markdown Renderer Styles */
+        #readme-container { font-size: 0.9rem; color: #ccc; line-height: 1.6; }
+        #readme-container h1, #readme-container h2, #readme-container h3 { color: var(--primary); border-bottom: 1px solid var(--border); margin: 18px 0 8px 0; padding-bottom: 4px; }
+        #readme-container h4, #readme-container h5, #readme-container h6 { color: #fff; margin: 12px 0 5px 0; font-weight: bold; font-size: 0.85rem; text-transform: uppercase; }
+        #readme-container hr { border: 0; border-top: 1px solid var(--border); margin: 20px 0; }
+        #readme-container code { background: #222; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: var(--clear); font-size: 0.9em; }
+        #readme-container blockquote { border-left: 4px solid var(--primary); padding-left: 15px; color: #999; font-style: italic; margin: 15px 0; background: rgba(0, 123, 255, 0.05); padding: 10px; border-radius: 0 8px 8px 0; }
+        #readme-container ul { padding-left: 20px; list-style-type: square; }
+        #readme-container table { border-collapse: collapse; width: 100%; margin: 15px 0; font-size: 0.8rem; background: rgba(0,0,0,0.2); }
+        #readme-container th, #readme-container td { border: 1px solid var(--border); padding: 10px; text-align: left; }
+        #readme-container th { background: rgba(0, 123, 255, 0.15); color: var(--primary); font-weight: bold; }
+        #readme-container input[type="checkbox"] { margin-right: 8px; vertical-align: middle; accent-color: var(--primary); }
+
+        /* UI Elements */
+        input[type="text"], input[type="file"], .action-btn { width: 100%; padding: 10px; margin-bottom: 8px; border-radius: 6px; border: 1px solid var(--border); background: #111; color: white; box-sizing: border-box; cursor: pointer; transition: 0.2s; font-size: 0.8rem; }
+        .action-btn:hover { background: rgba(255,255,255,0.05); border-color: var(--primary); }
+        video { width: 100%; border-radius: 8px; background: #000; margin-top: 10px; max-height: 260px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        .vol-slider { cursor: pointer; accent-color: var(--primary); width: 100%; height: 6px; margin-top: 5px; }
         .stats-font { font-family: monospace; color: var(--primary); font-size: 1.2rem; }
     </style>
 </head>
@@ -53,34 +68,60 @@
 
     <div class="main-layout">
         <div class="sidebar">
-            <div class="player-logo" id="logoDev" onclick="devUnlock()">
+            <div class="player-logo loading-pulse" id="logoDev" onclick="devUnlock()">
                 <img src="https://cdn.jsdelivr.net/gh/maximhelper/max-stash@main/assets/welcomescan.jpg" alt="Logo" class="logo-img">
             </div>
             <div class="brand-title">max-stash</div>
         </div>
+
         <div class="content-area">
             <div id="tabReadme" class="tab-content active">
-                <div class="panel"><div id="readme-container">Fetching...</div></div>
+                <div class="panel">
+                    <div id="readme-container">Parsing README.md...</div>
+                </div>
+                <div class="panel" style="font-size: 0.7rem; color: #555;">
+                    SYSTEM_STATUS: MD_ENGINE_V2_ACTIVE | CACHE: DISABLED
+                </div>
             </div>
+
             <div id="tabPlayer" class="tab-content">
                 <div class="panel">
-                    <span style="font-size:0.75em;">VOL: <span id="volVal">100%</span></span>
+                    <span style="font-size:0.75em;">VOLUME: <span id="volVal">100%</span></span>
                     <input type="range" id="volBoost" class="vol-slider" min="1" max="15" value="10">
                     <div style="display:flex; gap:8px; margin-top:10px;">
-                        <button class="action-btn" id="clearBtn" onclick="toggleClearerAudio()">AUDIO: OFF</button>
-                        <button class="action-btn" id="visionBtn" onclick="toggleVision()">ULTRABRIGHT: OFF</button>
+                        <button class="action-btn" id="clearBtn" onclick="toggleClearerAudio()" style="color:var(--clear); border-color:var(--clear); background:none; font-size:0.7em;">AUDIO: OFF</button>
+                        <button class="action-btn" id="visionBtn" onclick="toggleVision()" style="color:var(--boost); border-color:var(--boost); background:none; font-size:0.7em;">ULTRABRIGHT: OFF</button>
                     </div>
                 </div>
-                <input type="file" id="f"><button id="mainBtn" class="action-btn" style="background:var(--primary);">INITIALIZE PLAYER</button><video id="vid" controls style="display:none;"></video>
+                <input type="file" id="f">
+                <button id="mainBtn" class="action-btn" style="background:var(--primary); font-weight:bold; border:none;">INITIALIZE PLAYER</button>
+                <video id="vid" controls style="display:none;"></video>
             </div>
+
             <div id="tabCloak" class="tab-content">
                 <div class="panel">
-                    <input type="text" id="cloakTitle" placeholder="Tab Title"><input type="text" id="cloakDomain" placeholder="Domain"><button class="action-btn" onclick="applyCustomCloak()" style="background:var(--primary);">APPLY</button>
-                    <button class="action-btn" onclick="applyCloak('Clever | Portal', 'clever.com')" style="background: var(--clever);">QUICK CLEVER</button>
+                    <input type="text" id="cloakTitle" placeholder="Custom Tab Title">
+                    <input type="text" id="cloakDomain" placeholder="Domain (e.g. google.com)">
+                    <button class="action-btn" onclick="applyCustomCloak()" style="background:var(--primary); border:none;">APPLY CLOAK</button>
+                    <hr style="border:0; border-top:1px solid var(--border); margin:10px 0;">
+                    <button class="action-btn" onclick="applyCloak('Clever | Portal', 'clever.com')" style="background: var(--clever); border:none;">QUICK CLEVER</button>
+                    <button class="action-btn" onclick="resetCloak()" style="background: #333; border:none;">RESET</button>
                 </div>
             </div>
-            <div id="tabStatistics" class="tab-content"><div class="panel">MEMORY: <div id="usedRam" class="stats-font">--- MB</div></div></div>
-            <div id="tabGames" class="tab-content"><div class="panel" style="text-align: center;"><button class="action-btn" onclick="launchGnMath()">OPEN GN-MATH</button><button class="action-btn" onclick="launchUGS()">OPEN UGS</button></div></div>
+
+            <div id="tabStatistics" class="tab-content">
+                <div class="panel">
+                    <p style="font-size: 0.8rem;">MEMORY_USAGE:</p>
+                    <div id="usedRam" class="stats-font">--- MB</div>
+                </div>
+            </div>
+
+            <div id="tabGames" class="tab-content">
+                <div class="panel" style="text-align: center; height: 280px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 15px;">
+                    <button class="action-btn" onclick="launchGnMath()" style="width:220px; border-color:var(--boost); color:var(--boost); background:none; font-weight:bold;">OPEN GN-MATH</button>
+                    <button class="action-btn" onclick="launchUGS()" style="width:220px; border-color:var(--clear); color:var(--clear); background:none; font-weight:bold;">OPEN UGS</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -88,6 +129,7 @@
 <script>
     let audioCtx, source, gainNode, filterNode, isDev = false, isVision = false, isClear = false;
     const ui = { f: document.getElementById('f'), vid: document.getElementById('vid'), vol: document.getElementById('volBoost'), volVal: document.getElementById('volVal') };
+    const LOGO_URL = "https://cdn.jsdelivr.net/gh/maximhelper/max-stash@main/assets/welcomescan.jpg";
 
     function showTab(t, btn) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -101,70 +143,160 @@
         try {
             const res = await fetch("https://cdn.jsdelivr.net/gh/maximhelper/max-stash@main/README.md?nocache=" + Date.now());
             if (res.ok) { 
-                let rawText = await res.text();
-                let lines = rawText.split('\n');
-                let htmlOutput = "";
+                let text = await res.text();
+                
+                // Advanced Manual Markdown Logic
+                let html = text
+                    .replace(/^###### (.*$)/gim, '<h6>$1</h6>')
+                    .replace(/^##### (.*$)/gim, '<h5>$1</h5>')
+                    .replace(/^#### (.*$)/gim, '<h4>$1</h4>')
+                    .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                    .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                    .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+                    .replace(/^> (.*$)/gim, '<blockquote>$1</blockquote>')
+                    .replace(/^\*\*\*|---|___/gim, '<hr>')
+                    .replace(/\*\*(.*)\*\*/gim, '<b>$1</b>')
+                    .replace(/\*(.*)\*/gim, '<i>$1</i>')
+                    .replace(/`(.*?)`/gim, '<code>$1</code>')
+                    .replace(/- \[x\] (.*$)/gim, '<input type="checkbox" checked disabled> $1')
+                    .replace(/- \[ \] (.*$)/gim, '<input type="checkbox" disabled> $1')
+                    .replace(/^\s*-\s(.*$)/gim, '<ul><li>$1</li></ul>')
+                    .replace(/<\/ul>\n<ul>/gim, '');
+
+                // Multi-line Table Handling
+                const lines = html.split('\n');
                 let inTable = false;
-
-                for (let line of lines) {
-                    let trimmed = line.trim();
-
-                    // Table Detection (Skip separator lines like |---|---|)
-                    if (trimmed.startsWith('|') && !trimmed.match(/^\|?\s*:?-+:?\s*\|/)) {
-                        let cells = trimmed.split('|').filter(c => c.trim() !== "");
-                        let row = `<tr>${cells.map(c => `<td>${c.trim()}</td>`).join('')}</tr>`;
-                        if (!inTable) { htmlOutput += "<table>"; inTable = true; }
-                        htmlOutput += row;
-                        continue;
-                    } else if (inTable) {
-                        htmlOutput += "</table>";
+                for(let i=0; i<lines.length; i++) {
+                    if(lines[i].includes('|')) {
+                        let cells = lines[i].split('|').filter(c => c.trim() !== "").map(c => c.trim());
+                        let isHeaderRow = (i === 0 || (lines[i-1] && !lines[i-1].includes('|')));
+                        let tag = isHeaderRow ? 'th' : 'td';
+                        
+                        if(cells.length > 0 && !cells[0].includes('---')) {
+                            lines[i] = `<tr>${cells.map(c => `<${tag}>${c}</${tag}>`).join('')}</tr>`;
+                            if(!inTable) { lines[i] = '<table>' + lines[i]; inTable = true; }
+                        } else { lines[i] = ""; } 
+                    } else if(inTable) {
+                        lines[i] = '</table>' + lines[i];
                         inTable = false;
                     }
-
-                    // Headers 1-6
-                    if (trimmed.startsWith('###### ')) htmlOutput += `<h6>${trimmed.slice(7)}</h6>`;
-                    else if (trimmed.startsWith('##### ')) htmlOutput += `<h5>${trimmed.slice(6)}</h5>`;
-                    else if (trimmed.startsWith('#### ')) htmlOutput += `<h4>${trimmed.slice(5)}</h4>`;
-                    else if (trimmed.startsWith('### ')) htmlOutput += `<h3>${trimmed.slice(4)}</h3>`;
-                    else if (trimmed.startsWith('## ')) htmlOutput += `<h2>${trimmed.slice(3)}</h2>`;
-                    else if (trimmed.startsWith('# ')) htmlOutput += `<h1>${trimmed.slice(2)}</h1>`;
-                    // Divider
-                    else if (trimmed.startsWith('---') || trimmed.startsWith('***')) htmlOutput += `<hr>`;
-                    // List
-                    else if (trimmed.startsWith('- ')) htmlOutput += `<ul><li>${trimmed.slice(2)}</li></ul>`;
-                    // Checkboxes
-                    else if (trimmed.startsWith('- [x]')) htmlOutput += `<input type="checkbox" checked disabled> ${trimmed.slice(6)}<br>`;
-                    else if (trimmed.startsWith('- [ ]')) htmlOutput += `<input type="checkbox" disabled> ${trimmed.slice(6)}<br>`;
-                    // Default Text
-                    else {
-                        // Bold/Italic/Code Inline
-                        let processed = trimmed
-                            .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
-                            .replace(/\*(.*?)\*/g, '<i>$1</i>')
-                            .replace(/`(.*?)`/g, '<code>$1</code>');
-                        htmlOutput += processed + "<br>";
-                    }
                 }
-                readmeBox.innerHTML = htmlOutput; 
-            }
-        } catch (e) { readmeBox.innerText = "Error loading README."; }
+                
+                readmeBox.innerHTML = lines.join('\n').replace(/\n/gim, '<br>'); 
+            } else { readmeBox.innerText = "README.md not found."; }
+        } catch (e) { readmeBox.innerText = "Fetch error."; }
     }
 
-    /* Keep all other utility functions below (initAudio, devUnlock, etc.) */
-    function initAudio() { if (!audioCtx && ui.vid.src) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); source = audioCtx.createMediaElementSource(ui.vid); gainNode = audioCtx.createGain(); filterNode = audioCtx.createBiquadFilter(); filterNode.type = "highpass"; filterNode.frequency.value = 150; source.connect(gainNode); gainNode.connect(audioCtx.destination); } }
-    function toggleClearerAudio() { if (!ui.vid.src) return; isClear = !isClear; initAudio(); gainNode.disconnect(); filterNode.disconnect(); if (isClear) { gainNode.connect(filterNode); filterNode.connect(audioCtx.destination); document.getElementById('clearBtn').innerText = "AUDIO: ON"; } else { gainNode.connect(audioCtx.destination); document.getElementById('clearBtn').innerText = "AUDIO: OFF"; } }
-    function toggleVision() { isVision = !isVision; ui.vid.style.filter = isVision ? "brightness(1.8) contrast(1.2) saturate(1.1)" : "none"; document.getElementById('visionBtn').innerText = isVision ? "ULTRABRIGHT: ON" : "ULTRABRIGHT: OFF"; }
-    function applyCloak(title, domain) { document.title = title; document.getElementById('dynamic-favicon').href = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`; }
-    function applyCustomCloak() { const t = document.getElementById('cloakTitle').value, d = document.getElementById('cloakDomain').value; if(t && d) applyCloak(t, d); }
-    function resetCloak() { document.title = "max-stash"; document.getElementById('dynamic-favicon').href = "https://cdn.jsdelivr.net/gh/maximhelper/max-stash@main/assets/welcomescan.jpg"; }
-    function launchGnMath() { fetch("https://cdn.jsdelivr.net/gh/gn-math/gn-math-DONTDMCA@main/autoupdate.html?t="+Date.now()).then(r=>r.text()).then(t=>{ const w=window.open("about:blank","_blank"); if(w){w.document.write(t);w.document.close();}}); }
-    function launchUGS() { fetch("https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile@main/AASINGLEFILE.html?t="+Date.now()).then(r=>r.text()).then(t=>{ const w=window.open("about:blank","_blank"); if(w){w.document.write(t);w.document.close();}}); }
-    function systemWipe() { if (ui.vid.src) URL.revokeObjectURL(ui.vid.src); ui.vid.src = ""; ui.vid.style.display = "none"; resetCloak(); showTab('readme', document.getElementById('tabBtnReadme')); }
-    function devUnlock() { if (prompt("Key:") === "123!@#qweQWE") { isDev = true; ui.vol.max = "50"; document.getElementById('logoDev').style.boxShadow = "0 0 20px var(--boost)"; } }
-    ui.vol.oninput = () => { initAudio(); if (gainNode) gainNode.gain.value = ui.vol.value / 10; ui.volVal.innerText = (ui.vol.value * 10) + "%"; };
-    document.getElementById('mainBtn').onclick = () => { const file = ui.f.files[0]; if (file) { ui.vid.src = URL.createObjectURL(file); ui.vid.style.display = "block"; } };
-    setInterval(() => { if (window.performance && window.performance.memory) document.getElementById('usedRam').innerText = (window.performance.memory.usedJSHeapSize / 1048576).toFixed(2) + " MB"; }, 1000);
-    window.onload = () => { fetchReadme(); resetCloak(); };
+    /* Core Systems */
+    function initAudio() {
+        if (!audioCtx && ui.vid.src) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            source = audioCtx.createMediaElementSource(ui.vid);
+            gainNode = audioCtx.createGain();
+            filterNode = audioCtx.createBiquadFilter();
+            filterNode.type = "highpass";
+            filterNode.frequency.value = 150; 
+            source.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+        }
+    }
+
+    function toggleClearerAudio() {
+        if (!ui.vid.src) return;
+        isClear = !isClear;
+        initAudio();
+        gainNode.disconnect();
+        filterNode.disconnect();
+        if (isClear) {
+            gainNode.connect(filterNode);
+            filterNode.connect(audioCtx.destination);
+            document.getElementById('clearBtn').innerText = "AUDIO: ON";
+        } else {
+            gainNode.connect(audioCtx.destination);
+            document.getElementById('clearBtn').innerText = "AUDIO: OFF";
+        }
+    }
+
+    function toggleVision() {
+        isVision = !isVision;
+        ui.vid.style.filter = isVision ? "brightness(1.8) contrast(1.2) saturate(1.1)" : "none";
+        document.getElementById('visionBtn').innerText = isVision ? "ULTRABRIGHT: ON" : "ULTRABRIGHT: OFF";
+    }
+
+    function applyCloak(title, domain) {
+        document.title = title;
+        document.getElementById('dynamic-favicon').href = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+    }
+
+    function applyCustomCloak() {
+        const t = document.getElementById('cloakTitle').value;
+        const d = document.getElementById('cloakDomain').value;
+        if(t && d) applyCloak(t, d);
+    }
+
+    function resetCloak() {
+        document.title = "max-stash";
+        document.getElementById('dynamic-favicon').href = LOGO_URL;
+    }
+
+    function launchGnMath() {
+        fetch("https://cdn.jsdelivr.net/gh/gn-math/gn-math-DONTDMCA@main/autoupdate.html?t=" + Date.now())
+        .then(r => r.text()).then(t => {
+            const w = window.open("about:blank", "_blank");
+            if (w) { w.document.write(t); w.document.close(); }
+        });
+    }
+
+    function launchUGS() {
+        fetch("https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile@main/AASINGLEFILE.html?t=" + Date.now())
+        .then(r => r.text()).then(t => {
+            const w = window.open("about:blank", "_blank");
+            if (w) { w.document.write(t); w.document.close(); }
+        });
+    }
+
+    function systemWipe() {
+        if (ui.vid.src) URL.revokeObjectURL(ui.vid.src);
+        ui.vid.src = ""; ui.vid.style.display = "none";
+        isDev = false; isVision = false; isClear = false;
+        ui.vol.max = "15"; ui.vol.value = "10"; ui.volVal.innerText = "100%";
+        ui.vid.style.filter = "none";
+        document.getElementById('clearBtn').innerText = "AUDIO: OFF";
+        document.getElementById('visionBtn').innerText = "ULTRABRIGHT: OFF";
+        document.getElementById('logoDev').classList.remove('dev-active');
+        resetCloak();
+        showTab('readme', document.getElementById('tabBtnReadme'));
+    }
+
+    function devUnlock() {
+        if (prompt("Key:") === "123!@#qweQWE") {
+            isDev = true; ui.vol.max = "50"; 
+            ui.volVal.style.color = "var(--boost)";
+            document.getElementById('logoDev').classList.add('dev-active');
+        }
+    }
+
+    ui.vol.oninput = () => {
+        initAudio();
+        if (gainNode) gainNode.gain.value = ui.vol.value / 10;
+        ui.volVal.innerText = (ui.vol.value * 10) + "%";
+    };
+
+    document.getElementById('mainBtn').onclick = () => {
+        const file = ui.f.files[0];
+        if (file) { ui.vid.src = URL.createObjectURL(file); ui.vid.style.display = "block"; }
+    };
+
+    setInterval(() => {
+        if (window.performance && window.performance.memory) {
+            document.getElementById('usedRam').innerText = (window.performance.memory.usedJSHeapSize / 1048576).toFixed(2) + " MB";
+        }
+    }, 1000);
+
+    window.onload = () => { 
+        fetchReadme();
+        setTimeout(() => { resetCloak(); document.getElementById('logoDev').classList.remove('loading-pulse'); }, 1000); 
+    };
 </script>
 </body>
 </html>
