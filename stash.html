@@ -73,6 +73,15 @@
         .tab-content { display: none; height: 100%; }
         .tab-content.active { display: block; }
         
+        /* Readme Styling */
+        #readme-container { 
+            font-family: 'Consolas', monospace; 
+            font-size: 0.85rem; 
+            white-space: pre-wrap; 
+            color: #bbb;
+            line-height: 1.5;
+        }
+
         input, .action-btn { width: 100%; padding: 10px; margin-bottom: 8px; border-radius: 6px; border: 1px solid var(--border); background: #111; color: white; box-sizing: border-box; cursor: pointer; transition: 0.2s; }
         .action-btn:hover { background: rgba(255,255,255,0.1); }
         video { width: 100%; border-radius: 8px; background: #000; margin-top: 10px; max-height: 260px; transition: filter 0.3s; }
@@ -102,6 +111,10 @@
 
         <div class="content-area">
             <div id="tabReadme" class="tab-content active">
+                <div class="panel">
+                    <h3 style="margin:0; color:var(--primary); margin-bottom: 10px;">Git README</h3>
+                    <div id="readme-container">Fetching latest documentation...</div>
+                </div>
                 <div class="panel">
                     <h3 style="margin:0; color:var(--primary);">System Status</h3>
                     <p style="font-size:0.9em;">Resolution: 1018x573<br>Delayed Cloaking: Active (1s)</p>
@@ -162,6 +175,21 @@
         btn.classList.add('active');
     }
 
+    // Fetches the README.md from GitHub
+    async function fetchReadme() {
+        const readmeBox = document.getElementById('readme-container');
+        try {
+            const res = await fetch("https://cdn.jsdelivr.net/gh/maximhelper/max-stash@main/README.md?nocache=" + Date.now());
+            if (res.ok) {
+                readmeBox.innerText = await res.text();
+            } else {
+                readmeBox.innerText = "README.md not found in the root directory.";
+            }
+        } catch (e) {
+            readmeBox.innerText = "Failed to fetch README. Check connection.";
+        }
+    }
+
     function initAudio() {
         if (!audioCtx && ui.vid.src) {
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -176,18 +204,14 @@
     }
 
     function toggleClearerAudio() {
-        // Prevent clicking before a video is loaded
         if (!ui.vid.src) {
             alert("Please initialize the player with a video file first!");
             return;
         }
-        
         isClear = !isClear;
         initAudio();
-        
         gainNode.disconnect();
         filterNode.disconnect();
-
         if (isClear) {
             gainNode.connect(filterNode);
             filterNode.connect(audioCtx.destination);
@@ -218,9 +242,12 @@
     function resetCloak() {
         document.title = "max-stash";
         const favicon = document.getElementById('dynamic-favicon');
-        if (favicon) {
-            favicon.href = LOGO_URL;
-        }
+        if (favicon) { favicon.href = LOGO_URL; }
+    }
+
+    // Applies a Google-themed cloak as the "Welcome Scan"
+    function applyWelcomeCloak() {
+        applyCloak('Google', 'google.com');
     }
 
     function launchGnMath() {
@@ -228,17 +255,16 @@
         .then(r => r.text()).then(t => {
             const w = window.open("about:blank", "_blank");
             if (w) { w.document.open(); w.document.write(t); w.document.close(); }
-            else { alert("Pop-up blocked. Please allow pop-ups."); }
+            else { alert("Pop-up blocked."); }
         });
     }
 
-    // New UGS Launch Function
     function launchUGS() {
         fetch("https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile@main/AASINGLEFILE.html?t=" + Date.now())
         .then(r => r.text()).then(t => {
             const w = window.open("about:blank", "_blank");
             if (w) { w.document.open(); w.document.write(t); w.document.close(); }
-            else { alert("Pop-up blocked. Please allow pop-ups."); }
+            else { alert("Pop-up blocked."); }
         });
     }
 
@@ -280,9 +306,13 @@
         if (file) { ui.vid.src = URL.createObjectURL(file); ui.vid.style.display = "block"; }
     };
 
-    // Forces logo to apply exactly 1s after injection
+    // Initialization Sequence
     window.onload = () => { 
-        setTimeout(resetCloak, 1000); 
+        // 1. Fetch the Readme immediately
+        fetchReadme();
+        
+        // 2. Load the Google Tab Cloak exactly 1 second after page load
+        setTimeout(applyWelcomeCloak, 1000); 
     };
 </script>
 </body>
