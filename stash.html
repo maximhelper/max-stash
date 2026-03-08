@@ -10,27 +10,74 @@
             --primary: #007bff; --border: #333; --danger: #ff4757; 
             --clever: #2f5be7; --boost: #ff00ff; --clear: #00d2ff; 
         }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
-        .app-shell { width: 1018px; height: 573px; background: var(--container-bg); border: 1px solid var(--border); border-radius: 12px; display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,0.8); position: relative; overflow: hidden; }
-        .nav-tabs { display: flex; flex-direction: row; gap: 12px; padding: 15px 25px; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.2); }
-        .nav-tabs button { background: none; border: none; color: var(--text); opacity: 0.6; cursor: pointer; font-weight: bold; padding: 8px 10px; font-size: 0.8em; transition: 0.2s; }
+        
+        /* Light Mode Variables */
+        body.light-mode {
+            --bg: #f0f2f5; --container-bg: #ffffff; --text: #1a1a1a;
+            --border: #d1d1d1;
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); height: 100vh; margin: 0; overflow: hidden; transition: background 0.3s, color 0.3s; }
+        .app-shell { width: 100vw; height: 100vh; background: var(--container-bg); display: flex; flex-direction: column; position: relative; overflow: hidden; transition: background 0.3s; }
+        .nav-tabs { display: flex; flex-direction: row; gap: 12px; padding: 15px 25px; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.4); z-index: 10; transition: border-color 0.3s, background 0.3s; }
+        
+        body.light-mode .nav-tabs { background: rgba(0,0,0,0.05); }
+
+        .nav-tabs button { background: none; border: none; color: var(--text); opacity: 0.6; cursor: pointer; font-weight: bold; padding: 8px 10px; font-size: 0.85em; transition: 0.2s; }
         .nav-tabs button.active { opacity: 1; color: var(--primary); border-bottom: 2px solid var(--primary); }
-        .main-layout { display: flex; flex: 1; padding: 20px; gap: 20px; overflow: hidden; }
-        .sidebar { width: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 1px solid var(--border); padding-right: 20px; }
-        .player-logo { width: 70px; height: 70px; background: var(--primary); border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 1px solid rgba(255,255,255,0.3); margin-bottom: 15px; box-shadow: 0 0 15px rgba(0, 123, 255, 0.4); cursor: pointer; overflow: hidden; }
+        .main-layout { display: flex; flex: 1; padding: 30px; gap: 30px; overflow: hidden; }
+        .sidebar { width: 200px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; border-right: 1px solid var(--border); padding-right: 30px; padding-top: 20px; transition: border-color 0.3s; }
+        
+        .player-logo { width: 100px; height: 100px; background: var(--primary); border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 1px solid rgba(255,255,255,0.3); margin-bottom: 20px; box-shadow: 0 0 20px rgba(0, 123, 255, 0.4); cursor: default; overflow: hidden; transition: 0.4s; }
+        
+        /* Dev Mode Logo Glow */
+        body.dev-mode .player-logo {
+            box-shadow: 0 0 18px rgba(170, 0, 255, 0.6); /* Subtle purple glow */
+            border-color: rgba(170, 0, 255, 0.5);
+        }
+
         .logo-img { width: 100%; height: 100%; object-fit: cover; }
-        .brand-title { font-size: 1.2rem; font-weight: bold; color: var(--text); }
-        .content-area { flex: 1; overflow-y: auto; padding-right: 5px; }
-        .panel { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 12px; }
+        .brand-title { font-size: 1.5rem; font-weight: bold; color: var(--text); letter-spacing: 1px; transition: color 0.3s; }
+        .content-area { flex: 1; overflow-y: auto; padding-right: 10px; }
+        
+        .panel { background: rgba(255,255,255,0.03); padding: 25px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 15px; transition: background 0.3s, border-color 0.3s; }
+        body.light-mode .panel { background: #f8f9fa; }
+
         .tab-content { display: none; height: 100%; }
         .tab-content.active { display: block; }
         
-        textarea { width: 100%; height: 60px; background: #111; border: 1px solid var(--border); border-radius: 6px; color: white; padding: 10px; resize: none; font-family: monospace; font-size: 0.75em; margin-bottom: 8px; box-sizing: border-box; }
-        input, .action-btn { width: 100%; padding: 10px; margin-bottom: 8px; border-radius: 6px; border: 1px solid var(--border); background: #111; color: white; box-sizing: border-box; font-size: 0.8em; cursor: pointer; transition: 0.2s; }
+        input, .action-btn { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: 1px solid var(--border); background: #111; color: white; box-sizing: border-box; font-size: 0.9em; cursor: pointer; transition: 0.2s; }
         .action-btn:hover { border-color: var(--primary); background: rgba(255,255,255,0.05); }
-        video { width: 100%; border-radius: 8px; background: #000; margin-top: 10px; max-height: 220px; transition: filter 0.3s; }
-        .vol-slider { cursor: pointer; accent-color: var(--primary); width: 100%; height: 6px; margin-top: 5px; }
-        #readme-container { white-space: pre-wrap; font-family: monospace; font-size: 0.85em; color: #bbb; }
+        
+        body.light-mode input, body.light-mode .action-btn { background: #fff; color: #1a1a1a; }
+        body.light-mode .action-btn:hover { background: #f0f0f0; }
+
+        video { width: 100%; border-radius: 12px; background: #000; margin-top: 15px; max-height: 450px; transition: filter 0.3s; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        
+        #prog-cont { width: 100%; height: 10px; background: #111; border-radius: 5px; margin: 15px 0; display: none; overflow: hidden; border: 1px solid var(--border); }
+        #prog-bar { height: 100%; width: 0%; background: var(--primary); transition: width 0.1s; }
+
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+        .stat-item { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; border: 1px solid #222; transition: background 0.3s, border-color 0.3s; }
+        body.light-mode .stat-item { background: #fff; border-color: #eee; }
+
+        .stat-label { font-size: 0.7rem; color: #777; text-transform: uppercase; margin-bottom: 5px; }
+        .stat-val { font-family: monospace; font-size: 1.1rem; color: var(--primary); }
+
+        /* Theme Switch CSS */
+        .toggle-row { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 8px; border: 1px solid var(--border); transition: background 0.3s, border-color 0.3s; }
+        body.light-mode .toggle-row { background: #fff; border-color: #eee; }
+        
+        .switch { position: relative; display: inline-block; width: 50px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #333; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--boost); /* Now uses Neon Pink when active */ }
+        input:checked + .slider:before { transform: translateX(26px); }
+
+        /* No-Scroll Game Center & Wider Buttons */
+        #tabGames { overflow: hidden; }
+        #tabGames .panel { height: 100%; margin: 0; padding: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 20px; overflow: hidden; border: none; background: none; }
     </style>
 </head>
 <body>
@@ -42,12 +89,12 @@
         <button id="tabBtnCloak" onclick="showTab('cloak', this)">CLOAKING</button>
         <button id="tabBtnStatistics" onclick="showTab('statistics', this)">STATISTICS</button>
         <button id="tabBtnGames" onclick="showTab('games', this)">GAME CENTER</button>
-        <button onclick="systemWipe()" style="color:var(--danger); margin-left: auto;">WIPE</button>
+        <button onclick="systemWipe()" style="color:var(--danger); margin-left: auto;">SYSTEM WIPE</button>
     </div>
 
     <div class="main-layout">
         <div class="sidebar">
-            <div class="player-logo" id="logoDev" onclick="devUnlock()">
+            <div class="player-logo" onclick="devUnlock()">
                 <img src="https://cdn.jsdelivr.net/gh/maximhelper/max-stash@main/assets/welcomescan.jpg" alt="Logo" class="logo-img">
             </div>
             <div class="brand-title">max-stash</div>
@@ -56,53 +103,67 @@
         <div class="content-area">
             <div id="tabReadme" class="tab-content active">
                 <div class="panel">
-                    <h3 style="margin:0 0 10px 0; color:var(--primary); font-size: 1em;">SYSTEM_LOG:</h3>
-                    <div id="readme-container">Fetching README.txt...</div>
+                    <h3 style="margin:0 0 15px 0; color:var(--primary); font-size: 1.1em;">SYSTEM_LOG:</h3>
+                    <div id="readme-container" style="white-space: pre-wrap; font-family: monospace; font-size: 0.9em; color: #bbb; line-height: 1.5;">Ready.</div>
                 </div>
             </div>
 
             <div id="tabPlayer" class="tab-content">
                 <div class="panel">
-                    <textarea id="convInput" placeholder="Base64 Converter..."></textarea>
-                    <div style="display:flex; gap:8px; margin-bottom: 10px;">
-                        <button class="action-btn" style="background:var(--primary); border:none; font-weight:bold;" onclick="handleBase64(true)">ENCODE</button>
-                        <button class="action-btn" style="background:var(--clever); border:none; font-weight:bold;" onclick="handleBase64(false)">DECODE</button>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <button class="action-btn" onclick="triggerFile('mp4', '.mp4')">FROM MP4</button>
+                        <button class="action-btn" onclick="triggerFile('txt', '.txt')">FROM TXT</button>
                     </div>
-                    <hr style="border:0; border-top:1px solid var(--border); margin:10px 0;">
-                    <span style="font-size:0.75em;">VOL: <span id="volVal">100%</span></span>
-                    <input type="range" id="volBoost" class="vol-slider" min="1" max="15" value="10">
-                    <div style="display:flex; gap:8px; margin-top:10px;">
-                        <button class="action-btn" id="clearBtn" onclick="toggleClearerAudio()" style="color:var(--clear); border-color:var(--clear); background:none; font-size:0.7em;">AUDIO: OFF</button>
-                        <button class="action-btn" id="visionBtn" onclick="toggleVision()" style="color:var(--boost); border-color:var(--boost); background:none; font-size:0.7em;">ULTRABRIGHT: OFF</button>
+                    <button id="toTxtBtn" class="action-btn" onclick="triggerFile('totxt', '.mp4')" style="background:var(--danger); display:none; border:none; font-weight: bold;">CONVERT MP4 TO TXT</button>
+                    <div id="prog-cont"><div id="prog-bar"></div></div>
+                    <hr style="border:0; border-top:1px solid var(--border); margin:20px 0;">
+                    <span style="font-size:0.85em; font-weight: bold;">VOLUME BOOST: <span id="volVal">100%</span></span>
+                    <input type="range" id="volBoost" style="width:100%; accent-color:var(--primary); margin: 10px 0;" min="1" max="15" value="10">
+                    <div style="display:flex; gap:12px; margin-top:15px;">
+                        <button class="action-btn" id="clearBtn" onclick="toggleClearerAudio()" style="color:var(--clear); border-color:var(--clear); background:none; font-size:0.8em;">CLEARER AUDIO: OFF</button>
+                        <button class="action-btn" id="visionBtn" onclick="toggleVision()" style="color:var(--boost); border-color:var(--boost); background:none; font-size:0.8em;">ULTRABRIGHT: OFF</button>
                     </div>
                 </div>
-                <input type="file" id="f">
-                <button id="mainBtn" class="action-btn" style="background:var(--primary); font-weight:bold; border:none;">INITIALIZE PLAYER</button>
                 <video id="vid" controls style="display:none;"></video>
+                <input type="file" id="f" style="display:none;">
             </div>
 
             <div id="tabCloak" class="tab-content">
                 <div class="panel">
                     <input type="text" id="cloakTitle" placeholder="Custom Tab Title">
-                    <input type="text" id="cloakDomain" placeholder="Domain (e.g. google.com)">
+                    <input type="text" id="cloakDomain" placeholder="Favicon Domain (e.g. google.com)">
                     <button class="action-btn" onclick="applyCustomCloak()" style="background:var(--primary); border:none;">APPLY CLOAK</button>
-                    <hr style="border:0; border-top:1px solid var(--border); margin:10px 0;">
-                    <button class="action-btn" onclick="applyCloak('Clever | Portal', 'clever.com')" style="background: var(--clever); border:none;">QUICK CLEVER</button>
-                    <button class="action-btn" onclick="resetCloak()" style="background: #333; border:none;">RESET</button>
+                    <hr style="border:0; border-top:1px solid var(--border); margin:20px 0;">
+                    <button class="action-btn" onclick="applyCloak('Clever | Portal', 'clever.com')" style="background: var(--clever); border:none;">QUICK CLEVER CLOAK</button>
+                    <button class="action-btn" onclick="resetCloak()" style="background: #333; border:none;">RESET TAB</button>
                 </div>
             </div>
 
             <div id="tabStatistics" class="tab-content">
                 <div class="panel">
-                    <p style="font-size: 0.8rem;">MEMORY_USAGE:</p>
-                    <div id="usedRam" style="font-family: monospace; color:var(--primary); font-size:1.2rem;">--- MB</div>
+                    <div class="stat-grid">
+                        <div class="stat-item"><div class="stat-label">Session Uptime</div><div class="stat-val" id="stat-uptime">00:00</div></div>
+                        <div class="stat-item"><div class="stat-label">CPU Core Count</div><div class="stat-val" id="stat-cpu">--</div></div>
+                        <div class="stat-item"><div class="stat-label">Video Stream</div><div class="stat-val" id="stat-res">0 x 0</div></div>
+                        <div class="stat-item"><div class="stat-label">Net Type</div><div class="stat-val" id="stat-net">Unknown</div></div>
+                        <div class="stat-item"><div class="stat-label">Downlink</div><div class="stat-val" id="stat-speed">-- Mbps</div></div>
+                        <div class="stat-item"><div class="stat-label">Dropped Frames</div><div class="stat-val" id="stat-dropped">0</div></div>
+                    </div>
+                    
+                    <div class="toggle-row">
+                        <span style="font-size: 0.85em; font-weight: bold;">LIGHT MODE / DARK MODE</span>
+                        <label class="switch">
+                            <input type="checkbox" id="themeSwitch" onchange="toggleTheme()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
                 </div>
             </div>
 
             <div id="tabGames" class="tab-content">
-                <div class="panel" style="text-align: center; height: 280px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 15px;">
-                    <button class="action-btn" onclick="launchGnMath()" style="width:220px; border-color:var(--boost); color:var(--boost); background:none; font-weight:bold;">OPEN GN-MATH</button>
-                    <button class="action-btn" onclick="launchUGS()" style="width:220px; border-color:var(--clear); color:var(--clear); background:none; font-weight:bold;">OPEN UGS</button>
+                <div class="panel">
+                    <button class="action-btn" onclick="launchGnMath()" style="width: 100%; max-width:600px; border-color:var(--boost); color:var(--boost); background:none; font-weight:bold; padding: 20px;">OPEN GN-MATH</button>
+                    <button class="action-btn" onclick="launchUGS()" style="width: 100%; max-width:600px; border-color:var(--clear); color:var(--clear); background:none; font-weight:bold; padding: 20px;">OPEN UGS</button>
                 </div>
             </div>
         </div>
@@ -110,8 +171,15 @@
 </div>
 
 <script>
-    let audioCtx, source, gainNode, filterNode, isDev = false, isVision = false, isClear = false;
-    const ui = { f: document.getElementById('f'), vid: document.getElementById('vid'), vol: document.getElementById('volBoost'), volVal: document.getElementById('volVal') };
+    let audioCtx, source, gainNode, filterNode, isDev = false, isVision = false, isClear = false, currentMode = '', startTime = Date.now();
+    const ui = { 
+        f: document.getElementById('f'), 
+        vid: document.getElementById('vid'), 
+        vol: document.getElementById('volBoost'), 
+        volVal: document.getElementById('volVal'),
+        pBar: document.getElementById('prog-bar'), 
+        pCont: document.getElementById('prog-cont') 
+    };
     const LOGO_URL = "https://cdn.jsdelivr.net/gh/maximhelper/max-stash@main/assets/welcomescan.jpg";
 
     function showTab(t, btn) {
@@ -122,18 +190,52 @@
     }
 
     async function fetchReadme() {
-        const readmeBox = document.getElementById('readme-container');
         try {
             const res = await fetch("https://cdn.jsdelivr.net/gh/maximhelper/max-stash@main/README.txt?nocache=" + Date.now());
-            if (res.ok) { readmeBox.textContent = await res.text(); }
-            else { readmeBox.innerText = "README.txt not found."; }
-        } catch (e) { readmeBox.innerText = "Fetch error."; }
+            document.getElementById('readme-container').textContent = res.ok ? await res.text() : "Log not found.";
+        } catch (e) { document.getElementById('readme-container').innerText = "Network error."; }
     }
 
-    function handleBase64(isEncode) {
-        const area = document.getElementById('convInput');
-        try { area.value = isEncode ? btoa(area.value) : atob(area.value); }
-        catch(e) { alert("Invalid Base64 format."); }
+    function toggleTheme() {
+        document.body.classList.toggle('light-mode');
+    }
+
+    function triggerFile(mode, accept) { 
+        currentMode = mode; 
+        ui.f.accept = accept;
+        ui.f.click(); 
+    }
+
+    ui.f.onchange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (currentMode === 'mp4') { ui.vid.src = URL.createObjectURL(file); ui.vid.style.display = "block"; }
+        else if (currentMode === 'txt') {
+            const reader = new FileReader();
+            reader.onload = (ev) => { ui.vid.src = ev.target.result; ui.vid.style.display = "block"; };
+            reader.readAsText(file);
+        }
+        else if (currentMode === 'totxt') processChunks(file);
+    };
+
+    async function processChunks(file) {
+        ui.pCont.style.display = "block";
+        const chunkSize = 20 * 1024 * 1024;
+        let offset = 0, result = "data:" + (file.type || "video/mp4") + ";base64,";
+        const read = (f, o, l) => new Promise(r => { const rd = new FileReader(); rd.onload = (e) => r(new Uint8Array(e.target.result)); rd.readAsArrayBuffer(f.slice(o, o + l)); });
+
+        while (offset < file.size) {
+            const chunk = await read(file, offset, chunkSize);
+            let bin = ""; for (let i = 0; i < chunk.byteLength; i++) bin += String.fromCharCode(chunk[i]);
+            result += btoa(bin);
+            offset += chunkSize;
+            ui.pBar.style.width = Math.min((offset/file.size)*100, 100) + "%";
+        }
+
+        const blob = new Blob([result], { type: "text/plain" });
+        const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+        a.download = file.name.split('.')[0] + "_base64.txt"; a.click();
+        setTimeout(() => { ui.pCont.style.display = "none"; ui.pBar.style.width = "0%"; }, 1000);
     }
 
     function initAudio() {
@@ -146,74 +248,18 @@
             filterNode.frequency.value = 150; 
             source.connect(gainNode);
             gainNode.connect(audioCtx.destination);
+            applyAudioState();
         }
     }
 
-    function toggleClearerAudio() {
-        if (!ui.vid.src) return;
-        isClear = !isClear;
-        initAudio();
+    function applyAudioState() {
+        if (!gainNode) return;
         gainNode.disconnect();
         if (isClear) {
             gainNode.connect(filterNode);
             filterNode.connect(audioCtx.destination);
-            document.getElementById('clearBtn').innerText = "AUDIO: CLEAR";
         } else {
             gainNode.connect(audioCtx.destination);
-            document.getElementById('clearBtn').innerText = "AUDIO: OFF";
-        }
-    }
-
-    function toggleVision() {
-        isVision = !isVision;
-        ui.vid.style.filter = isVision ? "brightness(1.8) contrast(1.2) saturate(1.1)" : "none";
-        document.getElementById('visionBtn').innerText = isVision ? "ULTRABRIGHT: ON" : "ULTRABRIGHT: OFF";
-    }
-
-    function applyCloak(title, domain) {
-        document.title = title;
-        document.getElementById('dynamic-favicon').href = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
-    }
-
-    function applyCustomCloak() {
-        const t = document.getElementById('cloakTitle').value, d = document.getElementById('cloakDomain').value;
-        if(t && d) applyCloak(t, d);
-    }
-
-    function resetCloak() {
-        document.title = "max-stash";
-        document.getElementById('dynamic-favicon').href = LOGO_URL;
-    }
-
-    function launchGnMath() {
-        fetch("https://cdn.jsdelivr.net/gh/gn-math/gn-math-DONTDMCA@main/autoupdate.html?t=" + Date.now()).then(r => r.text()).then(t => {
-            const w = window.open("about:blank", "_blank");
-            if (w) { w.document.write(t); w.document.close(); }
-        });
-    }
-
-    function launchUGS() {
-        fetch("https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile@main/AASINGLEFILE.html?t=" + Date.now()).then(r => r.text()).then(t => {
-            const w = window.open("about:blank", "_blank");
-            if (w) { w.document.write(t); w.document.close(); }
-        });
-    }
-
-    function systemWipe() {
-        if (ui.vid.src) URL.revokeObjectURL(ui.vid.src);
-        ui.vid.src = ""; ui.vid.style.display = "none";
-        isDev = false; isVision = false; isClear = false;
-        ui.vol.max = "15"; ui.vol.value = "10"; ui.volVal.innerText = "100%";
-        ui.vid.style.filter = "none";
-        document.getElementById('convInput').value = "";
-        resetCloak();
-        showTab('readme', document.getElementById('tabBtnReadme'));
-    }
-
-    function devUnlock() {
-        if (prompt("Key:") === "123!@#qweQWE") {
-            isDev = true; ui.vol.max = "50"; 
-            document.getElementById('volVal').style.color = "var(--boost)";
         }
     }
 
@@ -223,17 +269,67 @@
         ui.volVal.innerText = (ui.vol.value * 10) + "%";
     };
 
-    document.getElementById('mainBtn').onclick = () => {
-        const file = ui.f.files[0];
-        if (file) { ui.vid.src = URL.createObjectURL(file); ui.vid.style.display = "block"; }
-    };
+    function toggleClearerAudio() {
+        isClear = !isClear;
+        document.getElementById('clearBtn').innerText = "CLEARER AUDIO: " + (isClear ? "ON" : "OFF");
+        if (audioCtx) applyAudioState();
+    }
 
-    setInterval(() => {
-        if (window.performance && window.performance.memory) {
-            document.getElementById('usedRam').innerText = (window.performance.memory.usedJSHeapSize / 1048576).toFixed(2) + " MB";
+    function toggleVision() {
+        isVision = !isVision;
+        ui.vid.style.filter = isVision ? "brightness(1.8) contrast(1.2) saturate(1.1)" : "none";
+        document.getElementById('visionBtn').innerText = isVision ? "ULTRABRIGHT: ON" : "ULTRABRIGHT: OFF";
+    }
+
+    function applyCloak(t, d) { document.title = t; document.getElementById('dynamic-favicon').href = `https://www.google.com/s2/favicons?domain=${d}&sz=64`; }
+    function applyCustomCloak() { applyCloak(document.getElementById('cloakTitle').value, document.getElementById('cloakDomain').value); }
+    function resetCloak() { document.title = "max-stash"; document.getElementById('dynamic-favicon').href = LOGO_URL; }
+
+    function devUnlock() {
+        if (prompt("Enter Developer Key") === "123!@#qweQWE") {
+            isDev = true; ui.vol.max = "50"; ui.volVal.style.color = "var(--boost)";
+            document.getElementById('toTxtBtn').style.display = "block";
+            document.body.classList.add('dev-mode');
         }
-    }, 1000);
+    }
 
+    function systemWipe() {
+        if (ui.vid.src) URL.revokeObjectURL(ui.vid.src);
+        ui.vid.src = ""; ui.vid.style.display = "none";
+        isDev = false; isVision = false; isClear = false;
+        
+        document.body.classList.remove('dev-mode');
+        document.body.classList.remove('light-mode');
+        document.getElementById('themeSwitch').checked = false;
+
+        ui.vol.max = "15"; ui.vol.value = "10"; ui.volVal.innerText = "100%"; ui.volVal.style.color = "inherit";
+        ui.vid.style.filter = "none";
+        document.getElementById('clearBtn').innerText = "CLEARER AUDIO: OFF";
+        document.getElementById('visionBtn').innerText = "ULTRABRIGHT: OFF";
+        document.getElementById('toTxtBtn').style.display = "none";
+        resetCloak();
+        showTab('readme', document.getElementById('tabBtnReadme'));
+    }
+
+    function updateStats() {
+        const now = new Date(Date.now() - startTime);
+        document.getElementById('stat-uptime').innerText = now.getUTCMinutes().toString().padStart(2, '0') + ":" + now.getUTCSeconds().toString().padStart(2, '0');
+        document.getElementById('stat-cpu').innerText = navigator.hardwareConcurrency || "--";
+        document.getElementById('stat-res').innerText = ui.vid.videoWidth + " x " + ui.vid.videoHeight;
+        const net = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        if (net) {
+            document.getElementById('stat-net').innerText = net.effectiveType || "Unknown";
+            document.getElementById('stat-speed').innerText = net.downlink + " Mbps";
+        }
+        if (ui.vid.getVideoPlaybackQuality) {
+            document.getElementById('stat-dropped').innerText = ui.vid.getVideoPlaybackQuality().droppedVideoFrames;
+        }
+    }
+
+    function launchGnMath() { fetch("https://cdn.jsdelivr.net/gh/gn-math/gn-math-DONTDMCA@main/autoupdate.html").then(r=>r.text()).then(t=>{ const w=window.open("about:blank"); w.document.write(t); w.document.close(); }); }
+    function launchUGS() { fetch("https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile@main/AASINGLEFILE.html").then(r=>r.text()).then(t=>{ const w=window.open("about:blank"); w.document.write(t); w.document.close(); }); }
+
+    setInterval(updateStats, 1000);
     window.onload = () => { fetchReadme(); setTimeout(resetCloak, 1000); };
 </script>
 </body>
