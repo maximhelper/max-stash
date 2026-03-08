@@ -191,7 +191,7 @@
 
     async function fetchReadme() {
         try {
-            const res = await fetch(`https://cdn.jsdelivr.net/gh/maximhelper/max-stash@${tag}/README.txt?nocache=${Date.now()}`);
+            const res = await fetch(`https://cdn.jsdelivr.net/gh/maximhelper/max-stash@main/README.txt?nocache=${Date.now()}`);
             document.getElementById('readme-container').textContent = res.ok ? await res.text() : "Log not found.";
         } catch (e) { document.getElementById('readme-container').innerText = "Network error."; }
     }
